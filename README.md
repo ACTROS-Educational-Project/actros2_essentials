@@ -1,2 +1,3 @@
-# actros2_essentials
-ACTROS resources for ROS2 course conducted by the Intelligent Robotics Lab, Rey Juan Carlos University. 
+# ros_to_ros2_talk_examples
+
+![Slide](slide_image.png)
