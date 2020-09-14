@@ -15,15 +15,54 @@ DummyOctomap::DummyOctomap(const std::string & name): Node(name)
   thresMin = 0.12;
   thresMax = 0.97;
 
-	m_octree_ = std::make_shared<octomap::OcTree>(voxel_res);
-  //m_octree_->setProbHit(probHit);
-  //m_octree_->setProbMiss(probMiss);
-  //m_octree_->setClampingThresMin(thresMin);
-  //m_octree_->setClampingThresMax(thresMax);
+	octree_ = std::make_shared<octomap::OcTree>(voxel_res);
+  octree_->setProbHit(probHit);
+  octree_->setProbMiss(probMiss);
+  octree_->setClampingThresMin(thresMin);
+  octree_->setClampingThresMax(thresMax);
+
+  pub_ = create_publisher<octomap_msgs::msg::Octomap>("/dummy_octomap", 1);
+
+  initOctomap();
+}
+
+void DummyOctomap::initOctomap() {
+  octomap::KeySet cells;
+  octomap::KeyRay keyRay;
+  octomap::point3d origin(0.0, 0.0, 0.0);
+  octomap::point3d target(3.0, 1.0, 0.1);
+
+  // We take some voxels
+  if (octree_->computeRayKeys(origin, target, keyRay)){
+	  cells.insert(keyRay.begin(), keyRay.end());
+	}
+
+  // We insert these voxels in the octree
+  for(auto cell : cells){
+    octree_->updateNode(cell, false);
+		octree_->setNodeValue(cell, 1.0, true);
+	}
+}
+
+void DummyOctomap::publishFullOctoMap() {
+	octomap_msgs::msg::Octomap map;
+	map.header.frame_id = "map";
+	//map.header.stamp = rostime;
+	size_t octomapSize = octree_->size();
+	if (octomapSize <= 1){
+		RCLCPP_WARN(get_logger(),"Nothing to publish, octree is empty");
+		return;
+	}
+	if (octomap_msgs::fullMapToMsg(*octree_, map)){
+    pub_->publish(map);
+    RCLCPP_INFO(get_logger(), "publishing a octomap of size [%u]", octomapSize);
+	}else{
+		RCLCPP_ERROR(get_logger(),"Error serializing OctoMap");
+	}
 }
 
 void DummyOctomap::step() {
-  RCLCPP_ERROR(get_logger(), "octree OccupancyThres [%f]", m_octree_->getOccupancyThres());
+  publishFullOctoMap();
 }
 
 }

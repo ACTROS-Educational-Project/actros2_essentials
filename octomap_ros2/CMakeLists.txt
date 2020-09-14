@@ -13,7 +13,6 @@ find_package(tf2 REQUIRED)
 find_package(octomap REQUIRED)
 find_package(octomap_msgs REQUIRED)
 
-
 set(dependencies
     rclcpp
     std_msgs
@@ -28,6 +27,8 @@ include_directories(include)
 
 add_executable(dummy_octomap_node src/dummy_octomap_node.cpp)
 ament_target_dependencies(dummy_octomap_node ${dependencies})
+target_link_libraries(dummy_octomap_node octomap)
+
 
 install(DIRECTORY include/
   DESTINATION include/
