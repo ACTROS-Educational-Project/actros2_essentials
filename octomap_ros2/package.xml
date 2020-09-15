@@ -4,7 +4,7 @@
   <name>octomap_ros2</name>
   <version>0.0.1</version>
   
-  <description>Node for octomap ros2 tests</description>
+  <description>ROS2 octomap example</description>
 
   <maintainer email="jonatan.gines@urjc.es">jginesclavero</maintainer>
  

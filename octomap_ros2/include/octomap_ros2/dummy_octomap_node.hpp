@@ -1,3 +1,17 @@
+// Copyright 2020 Intelligent Robotics Lab
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef DUMMYOCTOMAP_H_
 #define DUMMYOCTOMAP_H_
 
@@ -7,11 +21,6 @@
 #include <octomap/OcTreeKey.h>
 #include <octomap_msgs/conversions.h>
 #include <octomap_msgs/msg/octomap.hpp>
-
-//#include <octomap_msgs/GetOctomap.hpp>
-//#include <octomap_msgs/BoundingBoxQuery.hpp>
-//#include <octomap_ros/conversions.h>
-
 #include <math.h>
 
 namespace dummy_octomap {
@@ -19,9 +28,6 @@ namespace dummy_octomap {
 class DummyOctomap : public rclcpp::Node
 {
 public:
-	//typedef pcl::PointXYZ PCLPoint;
-	//typedef pcl::PointCloud<pcl::PointXYZ> PCLPointCloud;
-
 	DummyOctomap(const std::string & name);
 	void step();
 
