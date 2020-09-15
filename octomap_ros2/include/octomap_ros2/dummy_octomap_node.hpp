@@ -28,14 +28,14 @@ namespace dummy_octomap {
 class DummyOctomap : public rclcpp::Node
 {
 public:
-	DummyOctomap(const std::string & name);
-	void step();
+  DummyOctomap(const std::string & name);
+  void step();
 
 private:
   void initOctomap();
   void publishFullOctoMap();
 
-	std::shared_ptr<octomap::OcTree> octree_;
+  std::shared_ptr<octomap::OcTree> octree_;
   rclcpp::Publisher<octomap_msgs::msg::Octomap>::SharedPtr pub_;
 };
 
