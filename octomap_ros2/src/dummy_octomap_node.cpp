@@ -46,13 +46,13 @@ void DummyOctomap::initOctomap() {
 
   // We take some voxels
   if (octree_->computeRayKeys(origin, target, keyRay)) {
-	  cells.insert(keyRay.begin(), keyRay.end());
+    cells.insert(keyRay.begin(), keyRay.end());
   }
 
   // We insert these voxels in the octree
   for(auto cell : cells){
     octree_->updateNode(cell, false);
-	  octree_->setNodeValue(cell, 1.0, true);
+    octree_->setNodeValue(cell, 1.0, true);
   }
 }
 
@@ -62,14 +62,14 @@ void DummyOctomap::publishFullOctoMap() {
   //map.header.stamp = rostime;
   size_t octomapSize = octree_->size();
   if (octomapSize <= 1){
-	  RCLCPP_WARN(get_logger(),"Nothing to publish, octree is empty");
-	  return;
+    RCLCPP_WARN(get_logger(),"Nothing to publish, octree is empty");
+    return;
   }
   if (octomap_msgs::fullMapToMsg(*octree_, map)){
     pub_->publish(map);
     RCLCPP_INFO(get_logger(), "publishing a octomap of size [%u]", octomapSize);
   }else{
-	  RCLCPP_ERROR(get_logger(),"Error serializing OctoMap");
+    RCLCPP_ERROR(get_logger(),"Error serializing OctoMap");
   }
 }
 
