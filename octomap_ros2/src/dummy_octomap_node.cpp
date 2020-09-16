@@ -33,7 +33,7 @@ DummyOctomap::DummyOctomap(const std::string & name): Node(name)
   octree_->setClampingThresMin(thresMin);
   octree_->setClampingThresMax(thresMax);
 
-  pub_ = create_publisher<octomap_msgs::msg::Octomap>("/dummy_octomap", 1);
+  pub_ = create_publisher<octomap_msgs::msg::Octomap>("/dummy_octomap", rclcpp::SystemDefaultsQoS());
 
   initOctomap();
 }
@@ -42,10 +42,17 @@ void DummyOctomap::initOctomap() {
   octomap::KeySet cells;
   octomap::KeyRay keyRay;
   octomap::point3d origin(0.0, 0.0, 0.0);
-  octomap::point3d target(3.0, 1.0, 0.1);
-
+  octomap::point3d target1(3.0, 1.0, 0.1);
+  octomap::point3d target2(-3.0, -1.0, 2.0);
+  octomap::point3d target3(1.0, 1.0, 1.0);
   // We take some voxels
-  if (octree_->computeRayKeys(origin, target, keyRay)) {
+  if (octree_->computeRayKeys(origin, target1, keyRay)) {
+    cells.insert(keyRay.begin(), keyRay.end());
+  }
+  if (octree_->computeRayKeys(target1, target2, keyRay)) {
+    cells.insert(keyRay.begin(), keyRay.end());
+  }
+  if (octree_->computeRayKeys(origin, target3, keyRay)) {
     cells.insert(keyRay.begin(), keyRay.end());
   }
 
@@ -58,7 +65,7 @@ void DummyOctomap::initOctomap() {
 
 void DummyOctomap::publishFullOctoMap() {
   octomap_msgs::msg::Octomap map;
-  map.header.frame_id = "map";
+  map.header.frame_id = "odom";
   //map.header.stamp = rostime;
   size_t octomapSize = octree_->size();
   if (octomapSize <= 1){
